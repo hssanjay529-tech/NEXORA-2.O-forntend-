@@ -22,7 +22,7 @@ import type { PublicTenant, UserRole } from '../../types';
 import { ForgotPasswordModal } from './ForgotPasswordModal';
 
 interface LoginViewProps {
-  onLoginSuccess: () => void;
+  onLoginSuccess?: () => void;
 }
 
 interface VerifiedPreview {
@@ -132,7 +132,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess }) => {
 
         // Trigger smooth transition after badge animation
         setTimeout(() => {
-          onLoginSuccess();
+          onLoginSuccess?.();
         }, 850);
       } else {
         setErrorMessage(res.error || 'Authentication failed. Please verify your institutional email and password.');

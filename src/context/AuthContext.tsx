@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import type { UserProfile, UserRole, BackendHealth } from '../types';
 import { api } from '../api/endpoints';
 import { apiClient } from '../api/client';
@@ -10,9 +10,19 @@ interface AuthContextType {
   isAuthenticated: boolean;
   backendHealth: BackendHealth;
   login: (email: string, password?: string, tenantSlug?: string, rememberMe?: boolean) => Promise<{ success: boolean; user?: any; error?: string }>;
-  logout: () => void;
+  logout: () => Promise<void>;
   refreshHealth: () => Promise<void>;
 }
+
+const emptyProfile: UserProfile = {
+  id: '',
+  tenant_id: '',
+  email: '',
+  first_name: '',
+  last_name: '',
+  role: 'STUDENT',
+  is_active: false,
+};
 
 const defaultProfiles: Record<UserRole, UserProfile> = {
   STUDENT: {
@@ -79,7 +89,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return 'STUDENT';
   });
 
-  const [user, setUser] = useState<UserProfile>(() => defaultProfiles[role] || defaultProfiles.STUDENT);
   const [token, setToken] = useState<string | null>(() => {
     try {
       return sessionStorage.getItem('nexora_auth_token') || localStorage.getItem('nexora_auth_token');
@@ -90,11 +99,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     try {
-      return sessionStorage.getItem('nexora_auth_authenticated') === 'true' ||
-             localStorage.getItem('nexora_auth_authenticated') === 'true';
+      const hasAuth =
+        sessionStorage.getItem('nexora_auth_authenticated') === 'true' ||
+        localStorage.getItem('nexora_auth_authenticated') === 'true';
+      const hasToken =
+        Boolean(sessionStorage.getItem('nexora_auth_token') || localStorage.getItem('nexora_auth_token'));
+      return hasAuth && hasToken;
     } catch {
       return false;
     }
+  });
+
+  const [user, setUser] = useState<UserProfile>(() => {
+    if (isAuthenticated) {
+      return defaultProfiles[role] || defaultProfiles.STUDENT;
+    }
+    return emptyProfile;
   });
 
   const [backendHealth, setBackendHealth] = useState<BackendHealth>({
@@ -106,6 +126,44 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const health = await api.getHealth();
     setBackendHealth(health);
   };
+
+  const logout = useCallback(async () => {
+    // 1. Capture token before wiping state
+    const currentToken =
+      token ||
+      sessionStorage.getItem('nexora_auth_token') ||
+      localStorage.getItem('nexora_auth_token');
+
+    // 2. Clear client in-memory state immediately
+    setToken(null);
+    setIsAuthenticated(false);
+    setUser(emptyProfile);
+    apiClient.setAuthToken(null);
+
+    // 3. Purge all client-side Web Storage (sessionStorage + localStorage)
+    try {
+      sessionStorage.clear();
+      localStorage.removeItem('nexora_auth_authenticated');
+      localStorage.removeItem('nexora_auth_token');
+      localStorage.removeItem('nexora_auth_role');
+      localStorage.removeItem('nexora_remember_me');
+    } catch {
+      // ignore storage error
+    }
+
+    // 4. Notify backend to revoke session and wipe cookies
+    try {
+      await api.auth.logout(currentToken || undefined);
+    } catch {
+      // ignore network errors
+    }
+
+    // 5. Sanitize browser history to defeat Back button and BFcache navigation
+    if (typeof window !== 'undefined') {
+      window.history.replaceState(null, '', window.location.pathname);
+      window.dispatchEvent(new Event('nexora_session_destroyed'));
+    }
+  }, [token]);
 
   useEffect(() => {
     checkHealth();
@@ -134,11 +192,62 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         });
     } else {
       setIsAuthenticated(false);
+      setUser(emptyProfile);
     }
 
+    // Health check polling
     const interval = setInterval(checkHealth, 15000);
-    return () => clearInterval(interval);
-  }, []);
+
+    // BFcache & Back Button listener:
+    // When a page is restored from bfcache or back navigation occurs,
+    // event.persisted is true. We immediately verify session validity.
+    const handlePageShow = (event: PageTransitionEvent) => {
+      const storedAuth =
+        sessionStorage.getItem('nexora_auth_authenticated') === 'true' ||
+        localStorage.getItem('nexora_auth_authenticated') === 'true';
+      const storedTok =
+        sessionStorage.getItem('nexora_auth_token') ||
+        localStorage.getItem('nexora_auth_token');
+
+      if (event.persisted || !storedAuth || !storedTok) {
+        if (!storedTok || !storedAuth) {
+          // Stored session is dead; ensure UI is forced to unauthenticated state immediately
+          setToken(null);
+          setIsAuthenticated(false);
+          setUser(emptyProfile);
+          apiClient.setAuthToken(null);
+        }
+      }
+    };
+
+    // Popstate (Browser Back/Forward navigation) guard
+    const handlePopState = () => {
+      const storedTok =
+        sessionStorage.getItem('nexora_auth_token') ||
+        localStorage.getItem('nexora_auth_token');
+      if (!storedTok) {
+        setIsAuthenticated(false);
+        setToken(null);
+        setUser(emptyProfile);
+      }
+    };
+
+    // Global session expired event from 401 API interception
+    const handleSessionExpired = () => {
+      logout();
+    };
+
+    window.addEventListener('pageshow', handlePageShow);
+    window.addEventListener('popstate', handlePopState);
+    window.addEventListener('nexora_session_expired', handleSessionExpired);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('pageshow', handlePageShow);
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('nexora_session_expired', handleSessionExpired);
+    };
+  }, [logout]);
 
   const login = async (
     email: string,
@@ -173,6 +282,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           employee_id: res.user?.identifier,
           department_name: res.user?.department_name || baseProfile.department_name,
           programme_name: res.user?.programme_name || baseProfile.programme_name,
+          is_active: true,
         };
         setUser(profileUpdate);
 
@@ -180,7 +290,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
           const me = await api.auth.getMe();
           if (me) {
-            setUser((prev) => ({ ...prev, ...me }));
+            setUser((prev) => ({ ...prev, ...me, is_active: true }));
             if (me.role) {
               setRoleState(me.role as UserRole);
               storage.setItem('nexora_auth_role', me.role);
@@ -194,23 +304,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return { success: false, error: 'Authentication failed. Please check credentials.' };
     } catch (err: any) {
       return { success: false, error: err.message || 'Authentication failed. Please check credentials.' };
-    }
-  };
-
-  const logout = () => {
-    setToken(null);
-    apiClient.setAuthToken(null);
-    setIsAuthenticated(false);
-    api.auth.logout().catch(() => {});
-    try {
-      sessionStorage.removeItem('nexora_auth_authenticated');
-      sessionStorage.removeItem('nexora_auth_token');
-      sessionStorage.removeItem('nexora_auth_role');
-      localStorage.removeItem('nexora_auth_authenticated');
-      localStorage.removeItem('nexora_auth_token');
-      localStorage.removeItem('nexora_auth_role');
-    } catch {
-      // ignore storage error
     }
   };
 

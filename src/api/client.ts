@@ -52,6 +52,11 @@ class ApiClient {
     });
 
     if (!response.ok) {
+      if (response.status === 401 && !endpoint.includes('/auth/login') && !endpoint.includes('/auth/logout')) {
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('nexora_session_expired'));
+        }
+      }
       let errorMessage = `API Error ${response.status}: ${response.statusText}`;
       try {
         const errorJson = await response.json();
