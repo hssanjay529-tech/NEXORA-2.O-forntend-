@@ -3,7 +3,41 @@
 // Strictly maps to FastAPI backend routes defined in api_spec.md
 // =============================================================================
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+/**
+ * Dynamically resolves the API BASE_URL:
+ * 1. Priority 1: Next.js process.env.NEXT_PUBLIC_API_URL
+ * 2. Priority 2: Vite import.meta.env.VITE_API_URL
+ * 3. Default: http://localhost:8000 (FastAPI backend)
+ * 
+ * Strict Guard: Prevents accidental self-calling of frontend ports (e.g. 3000 or 5173).
+ */
+export const resolveApiBaseUrl = (): string => {
+  let resolvedUrl: string | undefined;
+
+  // 1. Next.js convention: process.env.NEXT_PUBLIC_API_URL
+  const nodeEnv = typeof globalThis !== 'undefined' ? (globalThis as any).process?.env : undefined;
+  if (nodeEnv && nodeEnv.NEXT_PUBLIC_API_URL) {
+    resolvedUrl = nodeEnv.NEXT_PUBLIC_API_URL;
+  }
+  // 2. Vite convention fallback: import.meta.env.VITE_API_URL
+  else if (typeof import.meta !== 'undefined' && (import.meta as any).env && (import.meta as any).env.VITE_API_URL) {
+    resolvedUrl = (import.meta as any).env.VITE_API_URL;
+  }
+
+  let finalUrl = (resolvedUrl || 'http://localhost:8000').trim().replace(/\/+$/, '');
+
+  // Guard: Never allow API calls to point to frontend ports (3000 or 5173)
+  if (finalUrl.includes(':3000') || finalUrl.includes(':5173')) {
+    console.error(
+      `[API CLIENT ERROR] BASE_URL (${finalUrl}) was configured to the frontend port! Strictly redirecting to FastAPI backend: http://localhost:8000`
+    );
+    finalUrl = 'http://localhost:8000';
+  }
+
+  return finalUrl;
+};
+
+export const BASE_URL = resolveApiBaseUrl();
 
 export interface ApiRequestOptions extends RequestInit {
   tenantId?: string;

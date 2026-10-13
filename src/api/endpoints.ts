@@ -3,7 +3,7 @@
 // Mapped 1:1 to Backend FastAPI routes (/api/v1) and PostgreSQL Schema
 // =============================================================================
 
-import { apiClient } from './client';
+import { apiClient, BASE_URL } from './client';
 import type {
   UserProfile,
   BackendHealth,
@@ -30,10 +30,10 @@ import type {
 } from '../types';
 
 export const api = {
-  // System Health
+  // System Health - Strictly targets FastAPI backend
   async getHealth(): Promise<BackendHealth> {
     try {
-      const res = await fetch('/health');
+      const res = await fetch(`${BASE_URL}/health`);
       if (res.ok) {
         const data = await res.json();
         return {
@@ -44,25 +44,11 @@ export const api = {
         };
       }
     } catch {
-      // Fallback local port
-      try {
-        const fallbackRes = await fetch('http://localhost:8000/health');
-        if (fallbackRes.ok) {
-          const data = await fallbackRes.json();
-          return {
-            online: true,
-            message: `FastAPI Online (:8000) (${data.environment || 'Docker Container'})`,
-            version: data.version,
-            environment: data.environment,
-          };
-        }
-      } catch {
-        // Handled below
-      }
+      // Backend offline
     }
     return {
       online: false,
-      message: 'FastAPI Backend offline (Demonstration mode active)',
+      message: `FastAPI Backend offline at ${BASE_URL}`,
     };
   },
 
