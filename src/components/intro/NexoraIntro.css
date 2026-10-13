@@ -1,0 +1,540 @@
+/* ==========================================================================
+   NEXORA — Branded Intro Splash Screen Styling
+   Tokens & Animation Specs strictly aligned with brand guidelines
+   ========================================================================== */
+
+:root {
+  --nexora-bg: #060A1C;
+  --nexora-ink: #EEF1FF;
+  --nexora-mute: #8E97C2;
+  --nexora-purple: #7C5CFF;
+  --nexora-cyan: #22D3EE;
+  --nexora-pink: #FF4FA3;
+}
+
+/* --------------------------------------------------------------------------
+   Root Container & Overlay
+   -------------------------------------------------------------------------- */
+.nexora-intro-root {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 99999;
+  background-color: var(--nexora-bg);
+  color: var(--nexora-ink);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  font-family: 'Montserrat', sans-serif;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  box-sizing: border-box;
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0px);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              filter 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform, filter;
+}
+
+/* Exit fade transition */
+.nexora-intro-root.is-exiting {
+  opacity: 0;
+  transform: scale(1.08);
+  filter: blur(12px);
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   Layer 1: Aurora Background
+   -------------------------------------------------------------------------- */
+.nexora-aurora-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.nexora-aurora-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  -webkit-filter: blur(90px);
+  mix-blend-mode: screen;
+  will-change: transform, opacity;
+  animation-duration: 14s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+/* Orb 1: Purple (Top-Left) */
+.nexora-aurora-purple {
+  width: clamp(340px, 50vw, 720px);
+  height: clamp(340px, 50vw, 720px);
+  top: -15%;
+  left: -15%;
+  background: radial-gradient(circle, rgba(124, 92, 255, 0.5) 0%, rgba(124, 92, 255, 0.2) 55%, transparent 75%);
+  opacity: 0.42;
+  animation-name: nexora-drift-purple;
+}
+
+/* Orb 2: Cyan (Right) */
+.nexora-aurora-cyan {
+  width: clamp(320px, 46vw, 680px);
+  height: clamp(320px, 46vw, 680px);
+  top: 25%;
+  right: -12%;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.45) 0%, rgba(34, 211, 238, 0.18) 55%, transparent 75%);
+  opacity: 0.38;
+  animation-name: nexora-drift-cyan;
+}
+
+/* Orb 3: Pink (Bottom) */
+.nexora-aurora-pink {
+  width: clamp(350px, 52vw, 740px);
+  height: clamp(350px, 52vw, 740px);
+  bottom: -18%;
+  left: 20%;
+  background: radial-gradient(circle, rgba(255, 79, 163, 0.42) 0%, rgba(255, 79, 163, 0.16) 55%, transparent 75%);
+  opacity: 0.34;
+  animation-name: nexora-drift-pink;
+}
+
+@keyframes nexora-drift-purple {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(8vw, 10vh) scale(1.12);
+  }
+  100% {
+    transform: translate(3vw, 16vh) scale(0.96);
+  }
+}
+
+@keyframes nexora-drift-cyan {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-10vw, -8vh) scale(1.14);
+  }
+  100% {
+    transform: translate(-6vw, 12vh) scale(0.92);
+  }
+}
+
+@keyframes nexora-drift-pink {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-8vw, -12vh) scale(1.08);
+  }
+  100% {
+    transform: translate(7vw, -6vh) scale(0.94);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Layer 2: Particle Canvas
+   -------------------------------------------------------------------------- */
+.nexora-particles-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* --------------------------------------------------------------------------
+   Layer 3: Centered Content Stack
+   -------------------------------------------------------------------------- */
+.nexora-content-stack {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1.5rem;
+  max-width: 900px;
+  width: 100%;
+}
+
+/* Logo & Glow */
+.nexora-logo-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: clamp(1.2rem, 3vh, 2.2rem);
+  width: clamp(100px, 16vw, 160px);
+  height: clamp(100px, 16vw, 160px);
+}
+
+.nexora-logo-glow {
+  position: absolute;
+  inset: -20%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124, 92, 255, 0.65) 0%, rgba(34, 211, 238, 0.35) 45%, transparent 70%);
+  filter: blur(28px);
+  -webkit-filter: blur(28px);
+  opacity: 0;
+  transform: scale(0.7);
+  transition: opacity 1.2s ease, transform 1.2s ease;
+  pointer-events: none;
+}
+
+.nexora-logo-glow.is-active {
+  opacity: 0.75;
+  transform: scale(1);
+  animation: nexora-glow-pulse 3.4s ease-in-out infinite alternate;
+}
+
+@keyframes nexora-glow-pulse {
+  0% {
+    opacity: 0.6;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 0.9;
+    transform: scale(1.12);
+  }
+}
+
+.nexora-logo-img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transform: scale(0.55) rotate(-120deg);
+  filter: blur(16px);
+  -webkit-filter: blur(16px);
+  transition: transform 1.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+              opacity 1.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+              filter 1.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform, opacity, filter;
+  filter: drop-shadow(0 0 20px rgba(34, 211, 238, 0.35));
+}
+
+.nexora-logo-img.is-settled {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  filter: blur(0px) drop-shadow(0 0 24px rgba(34, 211, 238, 0.45));
+}
+
+/* --------------------------------------------------------------------------
+   Wordmark (Cinzel 800) with Scramble Effect
+   -------------------------------------------------------------------------- */
+.nexora-wordmark-container {
+  min-height: clamp(52px, 12vw, 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  margin-bottom: 0.4rem;
+}
+
+.nexora-wordmark-container.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.nexora-wordmark {
+  font-family: 'Cinzel', serif;
+  font-weight: 800;
+  font-size: clamp(46px, 11vw, 108px);
+  line-height: 1.05;
+  letter-spacing: 0.03em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scramble-letter {
+  display: inline-block;
+  transition: color 0.18s ease, text-shadow 0.25s ease;
+  min-width: 0.62em;
+  text-align: center;
+}
+
+.scramble-letter.unsettled {
+  color: var(--nexora-mute);
+  opacity: 0.85;
+}
+
+.scramble-letter.settled {
+  color: var(--nexora-ink);
+  text-shadow: 0 0 18px rgba(124, 92, 255, 0.7),
+               0 0 38px rgba(124, 92, 255, 0.35);
+}
+
+/* --------------------------------------------------------------------------
+   "Technologies" Divider Line
+   -------------------------------------------------------------------------- */
+.nexora-technologies-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 2vw, 18px);
+  margin-top: 0.3rem;
+  margin-bottom: clamp(1rem, 2.5vh, 1.8rem);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nexora-technologies-row.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.nexora-tech-line {
+  height: 1px;
+  width: clamp(28px, 6vw, 68px);
+  flex-shrink: 0;
+}
+
+.nexora-tech-line.left {
+  background: linear-gradient(to right, transparent, var(--nexora-cyan));
+}
+
+.nexora-tech-line.right {
+  background: linear-gradient(to left, transparent, var(--nexora-cyan));
+}
+
+.nexora-tech-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: clamp(10px, 1.8vw, 14px);
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: var(--nexora-mute);
+  padding-left: 0.45em; /* offsets visual tracking balance */
+}
+
+/* --------------------------------------------------------------------------
+   Subtitle: Word-by-Word Reveal
+   -------------------------------------------------------------------------- */
+.nexora-subtitle-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.35em;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: clamp(14px, 2.4vw, 22px);
+  color: var(--nexora-mute);
+  margin-bottom: clamp(0.7rem, 2vh, 1.2rem);
+  min-height: 1.6em;
+}
+
+.nexora-subtitle-word {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(12px);
+  -webkit-filter: blur(12px);
+  transform: translateY(14px);
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, filter, transform;
+}
+
+.nexora-subtitle-word.is-revealed {
+  opacity: 1;
+  filter: blur(0px);
+  -webkit-filter: blur(0px);
+  transform: translateY(0);
+}
+
+/* --------------------------------------------------------------------------
+   Tagline with Sweeping White Shine
+   -------------------------------------------------------------------------- */
+.nexora-tagline-wrapper {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  margin-bottom: clamp(1.4rem, 3vh, 2.4rem);
+}
+
+.nexora-tagline-wrapper.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.nexora-tagline {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: clamp(11px, 1.8vw, 14px);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: linear-gradient(
+    110deg,
+    #8E97C2 0%,
+    #8E97C2 35%,
+    #FFFFFF 50%,
+    #8E97C2 65%,
+    #8E97C2 100%
+  );
+  background-size: 260% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: nexora-shine-sweep 2.2s linear infinite;
+  display: inline-block;
+}
+
+@keyframes nexora-shine-sweep {
+  0% {
+    background-position: 180% 0;
+  }
+  100% {
+    background-position: -80% 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Progress Bar
+   -------------------------------------------------------------------------- */
+.nexora-progress-track {
+  width: clamp(200px, 45vw, 320px);
+  height: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  overflow: hidden;
+  position: relative;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.nexora-progress-track.is-visible {
+  opacity: 1;
+}
+
+.nexora-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--nexora-purple), var(--nexora-cyan));
+  border-radius: 9999px;
+  box-shadow: 0 0 10px var(--nexora-cyan), 0 0 18px var(--nexora-purple);
+  will-change: width;
+  transition: width 1.7s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* --------------------------------------------------------------------------
+   Skip Pill Button (Bottom-Right)
+   -------------------------------------------------------------------------- */
+.nexora-skip-button {
+  position: absolute;
+  bottom: clamp(16px, 3vh, 32px);
+  right: clamp(16px, 3vw, 32px);
+  z-index: 10;
+  background: rgba(6, 10, 28, 0.65);
+  border: 1px solid rgba(142, 151, 194, 0.35);
+  border-radius: 9999px;
+  padding: 7px 18px;
+  color: var(--nexora-mute);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.22s ease;
+  user-select: none;
+}
+
+.nexora-skip-button:hover {
+  border-color: var(--nexora-cyan);
+  color: var(--nexora-ink);
+  background: rgba(34, 211, 238, 0.12);
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.3);
+  transform: translateY(-1px);
+}
+
+.nexora-skip-button:active {
+  transform: translateY(0);
+}
+
+.nexora-skip-button:focus-visible {
+  outline: 2px solid var(--nexora-cyan);
+  outline-offset: 3px;
+}
+
+.nexora-skip-chevron {
+  width: 10px;
+  height: 10px;
+  transition: transform 0.2s ease;
+}
+
+.nexora-skip-button:hover .nexora-skip-chevron {
+  transform: translateX(2px);
+}
+
+/* --------------------------------------------------------------------------
+   Prefers Reduced Motion
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .nexora-intro-root {
+    transition: opacity 0.3s ease !important;
+  }
+  .nexora-intro-root.is-exiting {
+    transform: none !important;
+    filter: none !important;
+  }
+  .nexora-aurora-orb {
+    animation: none !important;
+  }
+  .nexora-logo-img {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  .nexora-logo-glow {
+    animation: none !important;
+    opacity: 0.6 !important;
+    transform: none !important;
+  }
+  .nexora-wordmark-container,
+  .nexora-technologies-row,
+  .nexora-tagline-wrapper,
+  .nexora-progress-track {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .nexora-subtitle-word {
+    transition: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+  }
+  .nexora-tagline {
+    animation: none !important;
+  }
+  .nexora-progress-fill {
+    transition: none !important;
+    width: 100% !important;
+  }
+}
