@@ -254,8 +254,10 @@ export const api = {
       }
       return [
         { id: 'usr-1', name: 'Dr. Priya Nair', email: 'prof.priya@apex.edu', role: 'FACULTY', department: 'Computer Science', status: 'ACTIVE', code: 'FAC-CSE-002' },
-        { id: 'usr-2', name: 'Aarav Reddy', email: 'student.aarav.reddy1@apex.edu', role: 'STUDENT', department: 'Computer Science', status: 'ACTIVE', code: '2024CSE001' },
+        { id: 'usr-2', name: 'Sanjay H S', email: 'sanjudeepu.153@gmail.com', role: 'STUDENT', department: 'Computer Science', status: 'ACTIVE', code: '2024CSE001' },
         { id: 'usr-3', name: 'Dr. Rajesh Sharma', email: 'admin@apex.edu', role: 'ADMIN', department: 'Institutional Operations', status: 'ACTIVE', code: 'ADM-001' },
+        { id: 'usr-5', name: 'Nirmala G', email: 'student.nirmala.g@apex.edu', role: 'STUDENT', department: 'Computer Science', status: 'ACTIVE', code: '2024CSE003' },
+        { id: 'usr-6', name: 'Nisarga B G', email: 'student.nisarga.bg@apex.edu', role: 'STUDENT', department: 'Computer Science', status: 'ACTIVE', code: '2024CSE004' },
       ];
     },
     async createUser(userData: { email: string; first_name: string; last_name: string; role: string; password?: string; roll_no?: string; employee_no?: string; designation?: string }) {
@@ -435,11 +437,28 @@ export const api = {
         // Fallback
       }
       return [
-        { id: 'STU-001', student_id: 'std-1', name: 'Aarav Reddy', roll_number: '2024CSE001', status: 'PRESENT', attendance_pct: 92.5 },
-        { id: 'STU-002', student_id: 'std-2', name: 'Ananya Sharma', roll_number: '2024CSE002', status: 'PRESENT', attendance_pct: 95.0 },
-        { id: 'STU-003', student_id: 'std-3', name: 'Rohan Verma', roll_number: '2024CSE003', status: 'ABSENT', attendance_pct: 73.4 },
-        { id: 'STU-004', student_id: 'std-4', name: 'Priya Iyer', roll_number: '2024CSE004', status: 'PRESENT', attendance_pct: 84.0 },
-        { id: 'STU-005', student_id: 'std-5', name: 'Sneha Gupta', roll_number: '2024CSE005', status: 'PRESENT', attendance_pct: 89.5 },
+        { id: 'STU-001', student_id: 'std-1', name: 'Sanjay H S', roll_number: '2024CSE001', status: 'PRESENT', attendance_pct: 95.5 },
+        { id: 'STU-003', student_id: 'std-3', name: 'Nirmala G', roll_number: '2024CSE003', status: 'PRESENT', attendance_pct: 91.2 },
+        { id: 'STU-004', student_id: 'std-4', name: 'Nisarga B G', roll_number: '2024CSE004', status: 'PRESENT', attendance_pct: 88.0 },
+        { id: 'STU-005', student_id: 'std-5', name: 'Nishanth C K', roll_number: '2024CSE005', status: 'PRESENT', attendance_pct: 89.5 },
+        { id: 'STU-006', student_id: 'std-6', name: 'Pavanraj Shetty S R', roll_number: '2024CSE006', status: 'PRESENT', attendance_pct: 93.0 },
+        { id: 'STU-007', student_id: 'std-7', name: 'Pooja', roll_number: '2024CSE007', status: 'PRESENT', attendance_pct: 94.5 },
+        { id: 'STU-008', student_id: 'std-8', name: 'Prajwal Gowda D', roll_number: '2024CSE008', status: 'ABSENT', attendance_pct: 78.5 },
+        { id: 'STU-009', student_id: 'std-9', name: 'Prarthana Ria R', roll_number: '2024CSE009', status: 'PRESENT', attendance_pct: 92.0 },
+        { id: 'STU-010', student_id: 'std-10', name: 'Preetham H A', roll_number: '2024CSE010', status: 'PRESENT', attendance_pct: 90.5 },
+        { id: 'STU-011', student_id: 'std-11', name: 'Prekshith M K', roll_number: '2024CSE011', status: 'PRESENT', attendance_pct: 87.0 },
+        { id: 'STU-012', student_id: 'std-12', name: 'Sahana', roll_number: '2024CSE012', status: 'PRESENT', attendance_pct: 94.0 },
+        { id: 'STU-013', student_id: 'std-13', name: 'Sanika C B', roll_number: '2024CSE013', status: 'PRESENT', attendance_pct: 91.5 },
+        { id: 'STU-014', student_id: 'std-14', name: 'Shalini M R', roll_number: '2024CSE014', status: 'PRESENT', attendance_pct: 95.5 },
+        { id: 'STU-015', student_id: 'std-15', name: 'Shashank H M', roll_number: '2024CSE015', status: 'PRESENT', attendance_pct: 89.0 },
+        { id: 'STU-016', student_id: 'std-16', name: 'Shreyas K M', roll_number: '2024CSE016', status: 'PRESENT', attendance_pct: 92.5 },
+        { id: 'STU-017', student_id: 'std-17', name: 'Shreyas V A', roll_number: '2024CSE017', status: 'PRESENT', attendance_pct: 90.0 },
+        { id: 'STU-018', student_id: 'std-18', name: 'Shwetha C S', roll_number: '2024CSE018', status: 'PRESENT', attendance_pct: 93.5 },
+        { id: 'STU-019', student_id: 'std-19', name: 'Soujanya H M', roll_number: '2024CSE019', status: 'PRESENT', attendance_pct: 96.5 },
+        { id: 'STU-020', student_id: 'std-20', name: 'Srujana K A', roll_number: '2024CSE020', status: 'PRESENT', attendance_pct: 91.0 },
+        { id: 'STU-021', student_id: 'std-21', name: 'Suprith T M', roll_number: '2024CSE021', status: 'PRESENT', attendance_pct: 88.5 },
+        { id: 'STU-022', student_id: 'std-22', name: 'Tarun Gowda A L', roll_number: '2024CSE022', status: 'PRESENT', attendance_pct: 94.0 },
+        { id: 'STU-023', student_id: 'std-23', name: 'Tejal Shekar', roll_number: '2024CSE023', status: 'PRESENT', attendance_pct: 95.0 },
       ];
     },
     async saveAttendance(records: AttendanceRecordItem[]) {
@@ -518,10 +537,28 @@ export const api = {
         // Fallback
       }
       return [
-        { student_id: 'std-1', roll_number: '2024CSE001', student_name: 'Aarav Reddy', internal_marks: 28, midterm_marks: 38, final_exam_marks: 29, total_marks: 95, letter_grade: 'A+' },
-        { student_id: 'std-2', roll_number: '2024CSE002', student_name: 'Ananya Sharma', internal_marks: 29, midterm_marks: 36, final_exam_marks: 27, total_marks: 92, letter_grade: 'A' },
-        { student_id: 'std-3', roll_number: '2024CSE003', student_name: 'Rohan Verma', internal_marks: 22, midterm_marks: 28, final_exam_marks: 24, total_marks: 74, letter_grade: 'B' },
-        { student_id: 'std-4', roll_number: '2024CSE004', student_name: 'Priya Iyer', internal_marks: 26, midterm_marks: 35, final_exam_marks: 26, total_marks: 87, letter_grade: 'A-' },
+        { student_id: 'std-1', roll_number: '2024CSE001', student_name: 'Sanjay H S', internal_marks: 30, midterm_marks: 39, final_exam_marks: 30, total_marks: 99, letter_grade: 'O' },
+        { student_id: 'std-3', roll_number: '2024CSE003', student_name: 'Nirmala G', internal_marks: 28, midterm_marks: 36, final_exam_marks: 28, total_marks: 92, letter_grade: 'A+' },
+        { student_id: 'std-4', roll_number: '2024CSE004', student_name: 'Nisarga B G', internal_marks: 27, midterm_marks: 35, final_exam_marks: 27, total_marks: 89, letter_grade: 'A+' },
+        { student_id: 'std-5', roll_number: '2024CSE005', student_name: 'Nishanth C K', internal_marks: 26, midterm_marks: 34, final_exam_marks: 26, total_marks: 86, letter_grade: 'A' },
+        { student_id: 'std-6', roll_number: '2024CSE006', student_name: 'Pavanraj Shetty S R', internal_marks: 28, midterm_marks: 37, final_exam_marks: 28, total_marks: 93, letter_grade: 'A+' },
+        { student_id: 'std-7', roll_number: '2024CSE007', student_name: 'Pooja', internal_marks: 29, midterm_marks: 38, final_exam_marks: 29, total_marks: 96, letter_grade: 'O' },
+        { student_id: 'std-8', roll_number: '2024CSE008', student_name: 'Prajwal Gowda D', internal_marks: 24, midterm_marks: 32, final_exam_marks: 25, total_marks: 81, letter_grade: 'A' },
+        { student_id: 'std-9', roll_number: '2024CSE009', student_name: 'Prarthana Ria R', internal_marks: 28, midterm_marks: 36, final_exam_marks: 28, total_marks: 92, letter_grade: 'A+' },
+        { student_id: 'std-10', roll_number: '2024CSE010', student_name: 'Preetham H A', internal_marks: 26, midterm_marks: 35, final_exam_marks: 26, total_marks: 87, letter_grade: 'A' },
+        { student_id: 'std-11', roll_number: '2024CSE011', student_name: 'Prekshith M K', internal_marks: 25, midterm_marks: 34, final_exam_marks: 26, total_marks: 85, letter_grade: 'A' },
+        { student_id: 'std-12', roll_number: '2024CSE012', student_name: 'Sahana', internal_marks: 29, midterm_marks: 38, final_exam_marks: 28, total_marks: 95, letter_grade: 'O' },
+        { student_id: 'std-13', roll_number: '2024CSE013', student_name: 'Sanika C B', internal_marks: 27, midterm_marks: 36, final_exam_marks: 27, total_marks: 90, letter_grade: 'A+' },
+        { student_id: 'std-14', roll_number: '2024CSE014', student_name: 'Shalini M R', internal_marks: 28, midterm_marks: 37, final_exam_marks: 29, total_marks: 94, letter_grade: 'A+' },
+        { student_id: 'std-15', roll_number: '2024CSE015', student_name: 'Shashank H M', internal_marks: 26, midterm_marks: 35, final_exam_marks: 27, total_marks: 88, letter_grade: 'A+' },
+        { student_id: 'std-16', roll_number: '2024CSE016', student_name: 'Shreyas K M', internal_marks: 28, midterm_marks: 36, final_exam_marks: 28, total_marks: 92, letter_grade: 'A+' },
+        { student_id: 'std-17', roll_number: '2024CSE017', student_name: 'Shreyas V A', internal_marks: 27, midterm_marks: 35, final_exam_marks: 27, total_marks: 89, letter_grade: 'A+' },
+        { student_id: 'std-18', roll_number: '2024CSE018', student_name: 'Shwetha C S', internal_marks: 28, midterm_marks: 37, final_exam_marks: 28, total_marks: 93, letter_grade: 'A+' },
+        { student_id: 'std-19', roll_number: '2024CSE019', student_name: 'Soujanya H M', internal_marks: 29, midterm_marks: 39, final_exam_marks: 29, total_marks: 97, letter_grade: 'O' },
+        { student_id: 'std-20', roll_number: '2024CSE020', student_name: 'Srujana K A', internal_marks: 27, midterm_marks: 36, final_exam_marks: 28, total_marks: 91, letter_grade: 'A+' },
+        { student_id: 'std-21', roll_number: '2024CSE021', student_name: 'Suprith T M', internal_marks: 26, midterm_marks: 34, final_exam_marks: 26, total_marks: 86, letter_grade: 'A' },
+        { student_id: 'std-22', roll_number: '2024CSE022', student_name: 'Tarun Gowda A L', internal_marks: 28, midterm_marks: 37, final_exam_marks: 28, total_marks: 93, letter_grade: 'A+' },
+        { student_id: 'std-23', roll_number: '2024CSE023', student_name: 'Tejal Shekar', internal_marks: 29, midterm_marks: 38, final_exam_marks: 29, total_marks: 96, letter_grade: 'O' },
       ];
     },
     async submitGradeApproval(courseCode: string) {
@@ -613,7 +650,10 @@ export const api = {
       ];
     },
     async submitAssignment(assignmentId: string, submissionNotes: string) {
-      return apiClient.post(`/api/v1/student/assignments/${assignmentId}/submit`, { notes: submissionNotes });
+      return apiClient.post(`/api/v1/student/assignments/${assignmentId}/submit`, {
+        notes: submissionNotes,
+        answers: { notes: submissionNotes }
+      });
     },
     async getFeeInvoices(): Promise<FeeInvoice[]> {
       const fallbackInvoices: FeeInvoice[] = [
@@ -642,7 +682,13 @@ export const api = {
       return fallbackInvoices;
     },
     async payFees(invoiceId: string, amount: number, paymentMethod: string) {
-      return apiClient.post('/api/v1/student/fees/pay', { fee_record_id: invoiceId, invoice_id: invoiceId, amount, payment_method: paymentMethod });
+      return apiClient.post('/api/v1/student/fees/pay', {
+        fee_record_id: invoiceId,
+        invoice_id: invoiceId,
+        amount,
+        method: paymentMethod,
+        payment_method: paymentMethod
+      });
     },
     async downloadFeeReceipt(invoiceId: string) {
       try {
@@ -706,10 +752,10 @@ export const api = {
             return {
               id: String(g.id || `GRV-${100 + i}`),
               category,
-              subject: g.subject || 'Student Query',
+              subject: g.title || g.subject || 'Student Query',
               status,
               created_at: g.created_at ? String(g.created_at).split('T')[0] : '2026-10-10',
-              last_reply: g.last_reply || 'Dean office review in progress.',
+              last_reply: g.resolution_notes || g.last_reply || 'Dean office review in progress.',
             };
           });
         }
@@ -722,7 +768,13 @@ export const api = {
       ];
     },
     async createGrievance(category: string, subject: string, description: string) {
-      return apiClient.post('/api/v1/student/grievances', { category, subject, description });
+      return apiClient.post('/api/v1/student/grievances', {
+        category,
+        title: subject,
+        subject,
+        description,
+        priority: 'MEDIUM'
+      });
     },
   },
 };

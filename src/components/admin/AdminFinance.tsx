@@ -14,8 +14,8 @@ export const AdminFinance: React.FC = () => {
   };
 
   const defaulters = [
-    { id: 'DEF-1', name: 'Rohan Verma', roll: 'CS2026-003', due: 55000, term: 'Fall 2026', daysOverdue: 14 },
-    { id: 'DEF-2', name: 'Kavya Nair', roll: 'CS2026-005', due: 28000, term: 'Fall 2026', daysOverdue: 9 },
+    { id: 'DEF-1', name: 'Nishanth C K', roll: '2024CSE005', due: 55000, term: 'Fall 2026', daysOverdue: 14 },
+    { id: 'DEF-2', name: 'Prajwal Gowda D', roll: '2024CSE008', due: 28000, term: 'Fall 2026', daysOverdue: 9 },
   ];
 
   return (

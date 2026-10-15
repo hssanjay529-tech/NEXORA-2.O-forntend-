@@ -28,9 +28,9 @@ const defaultProfiles: Record<UserRole, UserProfile> = {
   STUDENT: {
     id: 'eeeeeeee-0000-0000-0000-000000000001',
     tenant_id: '11111111-1111-1111-1111-111111111111',
-    email: 'student.aarav.reddy1@apex.edu',
-    first_name: 'Aarav',
-    last_name: 'Reddy',
+    email: 'sanjudeepu.153@gmail.com',
+    first_name: 'Sanjay',
+    last_name: 'H S',
     role: 'STUDENT',
     roll_number: '2024CSE001',
     department_name: 'Department of Computer Science & Engineering',
@@ -255,8 +255,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     tenantSlug?: string,
     rememberMe: boolean = false
   ): Promise<{ success: boolean; user?: any; error?: string }> => {
+    const trimmedEmail = email.trim();
+    const cleanPwd = password || '';
+    const isSanjay = trimmedEmail.toLowerCase() === 'sanjudeepu.153@gmail.com' && cleanPwd === 'sanju$123';
+
     try {
-      const res = await api.auth.login(email, password || 'Password123!', tenantSlug, rememberMe);
+      const res = await api.auth.login(trimmedEmail, cleanPwd || 'Password123!', tenantSlug, rememberMe);
       if (res && res.access_token) {
         setToken(res.access_token);
         apiClient.setAuthToken(res.access_token);
@@ -274,7 +278,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const profileUpdate: UserProfile = {
           ...baseProfile,
           id: res.user?.id || baseProfile.id,
-          email: res.user?.email || email,
+          email: res.user?.email || trimmedEmail,
           first_name: res.user?.first_name || baseProfile.first_name,
           last_name: res.user?.last_name || baseProfile.last_name,
           role: authenticRole,
@@ -303,6 +307,45 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       return { success: false, error: 'Authentication failed. Please check credentials.' };
     } catch (err: any) {
+      // Offline fallback support for development and demonstration
+      if (isSanjay) {
+        const authenticRole: UserRole = 'STUDENT';
+        const offlineToken = 'mock_jwt_sanjay_hs_' + Date.now();
+        setToken(offlineToken);
+        apiClient.setAuthToken(offlineToken);
+        setIsAuthenticated(true);
+        setRoleState(authenticRole);
+
+        const storage = rememberMe ? localStorage : sessionStorage;
+        storage.setItem('nexora_auth_authenticated', 'true');
+        storage.setItem('nexora_auth_token', offlineToken);
+        storage.setItem('nexora_auth_role', authenticRole);
+
+        const sanjayUser: UserProfile = {
+          id: 'eeeeeeee-0000-0000-0000-000000000001',
+          tenant_id: '11111111-1111-1111-1111-111111111111',
+          email: 'sanjudeepu.153@gmail.com',
+          first_name: 'Sanjay',
+          last_name: 'H S',
+          role: 'STUDENT',
+          roll_number: '2024CSE001',
+          department_name: 'Department of Computer Science & Engineering',
+          programme_name: 'B.Tech Computer Science & Engineering',
+          current_semester: 5,
+          cgpa: 3.84,
+          is_active: true,
+        };
+        setUser(sanjayUser);
+        return {
+          success: true,
+          user: {
+            ...sanjayUser,
+            name: 'Sanjay H S',
+            full_name: 'Sanjay H S',
+            identifier: '2024CSE001',
+          },
+        };
+      }
       return { success: false, error: err.message || 'Authentication failed. Please check credentials.' };
     }
   };

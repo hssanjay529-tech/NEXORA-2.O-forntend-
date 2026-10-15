@@ -7,7 +7,7 @@
  * Dynamically resolves the API BASE_URL:
  * 1. Priority 1: Next.js process.env.NEXT_PUBLIC_API_URL
  * 2. Priority 2: Vite import.meta.env.VITE_API_URL
- * 3. Default: http://localhost:8000 (FastAPI backend)
+ * 3. Default: https://nexora-2-o-backend.onrender.com (Deployed FastAPI backend)
  * 
  * Strict Guard: Prevents accidental self-calling of frontend ports (e.g. 3000 or 5173).
  */
@@ -24,14 +24,14 @@ export const resolveApiBaseUrl = (): string => {
     resolvedUrl = (import.meta as any).env.VITE_API_URL;
   }
 
-  let finalUrl = (resolvedUrl || 'http://localhost:8000').trim().replace(/\/+$/, '');
+  let finalUrl = (resolvedUrl || 'https://nexora-2-o-backend.onrender.com').trim().replace(/\/+$/, '');
 
-  // Guard: Never allow API calls to point to frontend ports (3000 or 5173)
+  // Strict Guard: Never allow API calls to point to frontend ports (3000 or 5173)
   if (finalUrl.includes(':3000') || finalUrl.includes(':5173')) {
-    console.error(
-      `[API CLIENT ERROR] BASE_URL (${finalUrl}) was configured to the frontend port! Strictly redirecting to FastAPI backend: http://localhost:8000`
+    console.warn(
+      `[API CLIENT WARNING] BASE_URL (${finalUrl}) was configured to the frontend port! Strictly redirecting to deployed backend: https://nexora-2-o-backend.onrender.com`
     );
-    finalUrl = 'http://localhost:8000';
+    finalUrl = 'https://nexora-2-o-backend.onrender.com';
   }
 
   return finalUrl;
